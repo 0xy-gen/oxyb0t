@@ -6,7 +6,8 @@ class RemoveCommand extends Command {
             aliases: ['remcmd', 'cmd-'],
             args: [
                 {
-                    id: 'commandID'
+                    id: 'commandID',
+                    type: 'command'
                 }
             ],
             ownerOnly: true,
@@ -15,7 +16,7 @@ class RemoveCommand extends Command {
     }
 
     exec(msg, args) {
-        this.handler.add(commandID);
+        this.handler.remove(args.commandID);
         return msg.reply(`Successfully removed command \`${commandID}\`.`).then(console.log(`Removed command: ${commandID}`)).catch(msg.reply(`Could not remove command \`${commandID}\``));
     }
 }

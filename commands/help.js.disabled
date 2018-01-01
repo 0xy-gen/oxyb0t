@@ -1,0 +1,52 @@
+const { Command } = require('discord-akairo');
+const fs = require('fs');
+
+class HelpCommand extends Command {
+    constructor() {
+        super('help', {
+            aliases: ['help'],
+            args: [
+                {
+                    id: 'command',
+                    type: 'command',
+                    default: ''
+                }
+            ],
+            typing: true,
+            description: 'Get general help or help about a command.'
+        });
+    }
+
+    exec(msg, args) {
+        //const modules = this.client.commandHandler.modules.forEach(logMapElements);
+        var commands = this.client.commandHandler.modules;
+        if(args.command) {
+            return msg.reply('Coming soon');
+        } else {
+            msg.author.send('**Available Commands:**').then(() => {
+                var batch = "";
+                var sortedCommands = Object.keys(commands).sort(),
+                for(var i in sortedCommands) {
+                    var cmd = sortedCommands[i];
+                    var info = "**__"+this.prefix+cmd+"__**";
+                    var description = commands[cmd].description;
+                    if(description) {
+                        info += "\n\t" + description;
+                    }
+                    var newBatch = batch + "\n" + info;
+                    if(newBatch.length > (1024 - 8)) {
+                        msg.author.send(batch);
+                        batch = info;
+                    } else {
+                        batch = newBatch;
+                    }
+                }
+                if(batch.length > 0) {
+                    msg.author.send(batch);
+                }
+            });
+        }
+    }
+}
+
+module.exports = HelpCommand;

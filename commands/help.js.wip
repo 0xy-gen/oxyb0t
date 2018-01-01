@@ -1,0 +1,52 @@
+const { Command } = require('discord-akairo');
+const fs = require('fs');
+
+class HelpCommand extends Command {
+    constructor() {
+        super('help', {
+            aliases: ['help'],
+            args: [
+                {
+                    id: 'command',
+                    type: 'command',
+                    default: ''
+                }
+            ],
+            typing: true,
+            description: 'Get general help or help about a command.',
+            cooldown: 300,
+            ratelimit: 1,
+            protected: true,
+            enabled: true
+        });
+    }
+
+    exec(msg, args) {
+        //const modules = this.client.commandHandler.modules.forEach(logMapElements);
+        var commands = this.client.commandHandler.modules;
+        var toSend = [];
+        if (!args.command) {
+            toSend.push("Use `"+this.prefix+"help <command>` to get more info about a command.\n");
+            toSend.push("Mod commands can be found using the mod prefix\n");
+            toSend.push("Having any issues or problems? Contact `0xygen#1030`"); //or visit www.website.ffs
+            toSend.push("**__Commands:__** \glsl\n");
+            Object.keys(commands).forEach(cmd => {
+                if(commands[cmd].enabled) toSend.push("\n"+this.prefix+cmd+"\n\t#"+commands[cmd].description);
+            });
+            toSend = toSend.join('');
+            if(toSend.length >= 1990) {
+                msg.util.send(toSend.substr(0, 1990).substr(0, toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```");
+                setTimeout(() => { msg.util.send("```glsl" + toSend.substr(toSend.substr(0, 1990).lastIndexOf('\n\t')) + "```");}, 1000);
+            } else msg.util.send(toSend + "```");
+        } else {
+            var arg = args.command.trim().toLowerCase();
+            if(commands.hasOwnProperty(arg)) {
+                toSend.push("__"+this.prefix+arg+"__");
+                if(commands[arg].hasOwnProperty("description")) toSend.push(commands[arg].description);
+                msg.util.send(toSend);
+            } else msg.util.send("Command `"+arg+"` not found. Don't use aliases.");
+        }
+    }
+}
+
+module.exports = HelpCommand;

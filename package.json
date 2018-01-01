@@ -4,7 +4,8 @@
   "description": "Yet another multi-usage Discord Bot",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
   },
   "author": "0xygen#1030",
   "license": "ISC",

@@ -7,8 +7,8 @@ class NudesCommand extends Command {
         });
     }
 
-    async exec(msg) {
-        await msg.react("👀");
+    exec(msg) {
+        msg.react("👀");
     }
 }
 
